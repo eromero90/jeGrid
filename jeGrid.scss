@@ -1,0 +1,79 @@
+/* Author Edison Romero @2015*/
+//Variables
+$container-width: 100%;
+$container-max-width: 1200px;
+$total-column:12;
+$gutter: 6px;
+
+//Placeholders
+%clear_fix{
+	&:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+%float_left{
+	float: left;
+}
+
+%gutter{
+	padding: $gutter;
+}
+
+//functions
+@function standard_colum_width(){
+	@return $container-width / $total-column;
+}
+
+@function grid-cells($n) {
+	@return standard_colum_width() * $n;
+}
+
+//Container
+.grid-container {
+	width: $container-width;
+	max-width: $container-max-width;
+	margin: 0 auto;
+}
+
+.grid-container *{
+    box-sizing: border-box; 
+}
+
+//Row
+.row {
+	@extend %clear_fix;
+}
+
+//nested grid
+[class*='ngrid-'] {
+	min-height: 1px;
+	width: standard_colum_width();
+	@extend %clear_fix;
+	@extend %float_left;
+	//gutter
+	@extend %gutter;
+}
+
+@for $i from 1 through $total-column {
+	.ngrid-#{$i} {
+		width: grid-cells($i);
+	}
+}
+
+//Columns
+[class*='column-'] {
+	min-height: 1px;
+	width: standard_colum_width();
+	@extend %float_left;
+	//gutter
+	@extend %gutter;
+}
+
+@for $i from 1 through $total-column {
+	.column-#{$i} {
+		width: grid-cells($i);
+	}
+}
